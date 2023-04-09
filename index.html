@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"
+      integrity="sha512-ml/QKfG3+Yes6TwOzQb7aCNtJF4PUyha6R3w8pSTo/VJSywl7ZreYvvtUso7fKevpsI+pYVVwnu82YO0q3V6eg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <script src="https://unpkg.com/pdf-lib"></script>
+
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+
+    <style>
+      #the-canvas {
+        border: 1px solid black;
+        direction: ltr;
+        height: auto;
+        padding: relative;
+      }
+
+      #canvas-con {
+        text-align: center;
+        height: 90vh;
+        overflow: scroll;
+      }
+
+      /*
+      Aligns the logo to the bottom right corner of the page
+       */
+      #logo {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        margin: 10px;
+      }
+
+      /*
+        reduces the size of the logo
+         */
+      #logo img {
+        width: 100px;
+      }
+
+      #controls {
+        text-align: center;
+      }
+    </style>
+
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="canvas-con">
+      <canvas
+        id="the-canvas"
+        ondrop="drop(event)"
+        ondragover="allowDrop(event)"
+      ></canvas>
+    </div>
+
+    <div id="controls">
+      <button id="prev">Previous</button>
+      <button id="next">Next</button>
+      &nbsp; &nbsp;
+      <span
+        >Page: <span id="page_num"></span> / <span id="page_count"></span
+      ></span>
+
+      <button id="clear">Clear</button>
+      <input value="100" type="number" id="zoom" style="width: 50px" />
+      <button id="zoomer">Zoom</button>
+      <button id="download">Download</button>
+    </div>
+
+    <div id="logo">
+      <img
+        id="drag1"
+        src="https://juripassmediaservice.onrender.com/v1/file/preview/avatar/stamp_1680993958285.png"
+        draggable="true"
+        crossorigin="anonymous"
+        ondragstart="drag(event)"
+      />
+    </div>
+
+    <script src="./main.js"></script>
+
+    <script src="./drag.js"></script>
+
+    <script src="./print.js"></script>
+  </body>
+</html>
