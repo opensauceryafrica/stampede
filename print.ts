@@ -1,3 +1,38 @@
+interface PDFLib {
+  PDFDocument: PDFDocument;
+}
+
+interface PDFDocument {
+  load: (arrayBuffer: ArrayBuffer) => Promise<PDFDocument>;
+  embedPng: (arrayBuffer: ArrayBuffer) => Promise<PDFImage>;
+  getPages: () => PDFPage[];
+  save: () => Promise<BlobPart>;
+}
+
+interface PDFPage {
+  drawImage: (image: PDFImage, options: PDFImageOptions) => void;
+  getSize: () => PDFSize;
+}
+
+interface PDFImage {
+  width: number;
+  height: number;
+}
+
+interface PDFImageOptions {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+interface PDFSize {
+  width: number;
+  height: number;
+}
+
+declare var PDFLib: PDFLib;
+
 async function printPDF() {
   const url =
     'https://juripassmediaservice.onrender.com/v1/file/download/avatar/claim_1680977804933.pdf?downloadToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2Q1ODkwMWE3M2UzNDlhN2I5YjU2NWQiLCJlbWFpbCI6ImNoZWZAb3BlbnNhdWNlcmVyLmNvbSIsImlhdCI6MTY4MDk2NzMzMywiZXhwIjoxNjgxMDUzNzMzfQ.BM92fz3bXn8J5xCmtJKmnOAUkCEJTHm1qE3YaVQld5c';
@@ -13,14 +48,14 @@ async function printPDF() {
 
   const pages = pdf.getPages();
 
-  for (i = 1; i <= pdfDoc.numPages; i++) {
+  for (let i = 1; i <= pdfDoc.numPages; i++) {
     const drawings = getDrawings(i);
 
-    for (drawing of drawings) {
+    for (const drawing of drawings) {
       console.log(drawing);
       const currPage = pages[i - 1];
-      currSize = currPage.getSize();
-      console.log(currSize, drawing.x, drawing.y);
+      const currSize = currPage.getSize();
+
       currPage.drawImage(pdfStamp, {
         x: drawing.x,
         y: currSize.height - drawing.y,
@@ -29,21 +64,12 @@ async function printPDF() {
       });
     }
   }
-  // {width: 612, height: 792} 0 0
-  // const currPage = pages[1];
-  // console.log(currPage.getSize(), currPage.getX(), currPage.getY());
-  // currPage.drawImage(pdfStamp, {
-  //   x: 302.87109375,
-  //   y: 729 - 629.6875 - (729 - 629.6875) * 0.6,
-  //   width: 150,
-  //   height: 120,
-  // });
 
   const pdfBytes = await pdf.save();
   saveByteArrayToPDF(pdfName, pdfBytes);
 }
 
-function saveByteArrayToPDF(name, byte) {
+function saveByteArrayToPDF(name: string, byte: BlobPart) {
   var blob = new Blob([byte], { type: 'application/pdf' });
   var link = document.createElement('a');
   link.href = window.URL.createObjectURL(blob);

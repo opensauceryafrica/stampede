@@ -10,7 +10,29 @@ var pdfjsLib = window['pdfjs-dist/build/pdf'];
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
-var pdfDoc = null,
+interface PDFDoc {
+  numPages: number;
+  getPage: (num: number) => Promise<PDFPage>;
+}
+
+interface PDFPage {
+  getViewport: (options: { scale: number }) => PDFViewport;
+  render: (options: {
+    canvasContext: CanvasRenderingContext2D;
+    viewport: PDFViewport;
+  }) => PDFRenderTask;
+}
+
+interface PDFViewport {
+  height: number;
+  width: number;
+}
+
+interface PDFRenderTask {
+  promise: Promise<void>;
+}
+
+var pdfDoc: PDFDoc = null,
   pageNum = 1,
   pageRendering = false,
   pageNumPending = null,
@@ -60,7 +82,7 @@ function renderPage(num) {
  * If another page rendering in progress, waits until the rendering is
  * finised. Otherwise, executes rendering immediately.
  */
-function queueRenderPage(num) {
+function queueRenderPage(num: number) {
   if (pageRendering) {
     pageNumPending = num;
   } else {
@@ -92,14 +114,15 @@ function onNextPage() {
 }
 document.getElementById('next').addEventListener('click', onNextPage);
 
-function zoom(e) {
+function zoom() {
   // get value in input field
-  var val = document.getElementById('zoom').value;
+  var val = (document.getElementById('zoom') as HTMLInputElement).value;
   // set scale
   scale = parseInt(val) / 100;
   // render page
   queueRenderPage(pageNum);
 }
+
 document.getElementById('zoomer').addEventListener('click', zoom);
 
 /**
@@ -107,7 +130,8 @@ document.getElementById('zoomer').addEventListener('click', zoom);
  */
 pdfjsLib.getDocument(url).promise.then(function (pdfDoc_) {
   pdfDoc = pdfDoc_;
-  document.getElementById('page_count').textContent = pdfDoc.numPages;
+  document.getElementById('page_count').textContent =
+    pdfDoc.numPages.toString();
 
   // re-render page
   queueRenderPage(pageNum);
