@@ -6,7 +6,8 @@
   "scripts": {
     "start": "tsc && npx netlify dev",
     "serve": "npx netlify dev",
-    "build": "tsc"
+    "build": "tsc",
+    "dev": "tsc --watch"
   },
   "repository": {
     "type": "git",
