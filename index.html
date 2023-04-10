@@ -16,81 +16,114 @@
 
     <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
 
+    <!-- Halfmoon CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/css/halfmoon-variables.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Halfmoon JS -->
+    <script src="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/js/halfmoon.min.js"></script>
+
+    <!-- Add icon library -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+
     <style>
-      #the-canvas {
-        border: 1px solid black;
-        direction: ltr;
-        height: auto;
-        padding: relative;
-      }
-
-      #canvas-con {
-        text-align: center;
-        height: 90vh;
-        overflow: scroll;
-      }
-
-      /*
-      Aligns the logo to the bottom right corner of the page
-       */
-      #logo {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        margin: 10px;
-      }
-
-      /*
-        reduces the size of the logo
-         */
-      #logo img {
-        width: 100px;
-      }
-
-      #controls {
-        text-align: center;
+      /* Style buttons */
+      .collectorload {
+        padding-left: 8px;
       }
     </style>
 
-    <title>Document</title>
+    <title>Stampede | Interactively Stamp PDF Files</title>
   </head>
   <body>
-    <div id="canvas-con">
-      <canvas
-        id="the-canvas"
-        ondrop="drop(event)"
-        ondragover="allowDrop(event)"
-      ></canvas>
+    <!-- Modal that can not be closed by clicking on the overlay, or pressing the [esc] key -->
+    <div
+      class="modal"
+      id="entrypoint"
+      tabindex="-1"
+      role="dialog"
+      data-overlay-dismissal-disabled="true"
+      data-esc-dismissal-disabled="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <!-- <a href="#" class="close" role="button" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </a> -->
+          <h1 class="modal-title">Hello, Stranger 👋</h1>
+          <p>
+            Welcome to <b>Stampede</b>, an interactive editor for stamping PDF
+            files.
+          </p>
+          <div class="text-right mt-20">
+            <!-- text-right = text-align: right, mt-20 = margin-top: 2rem (20px) -->
+            <!-- <a href="#" class="btn mr-5" role="button">Close</a> -->
+            <a href="#collector" class="btn btn-primary" role="button"
+              >Continue</a
+            >
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div id="controls">
-      <button id="prev">Previous</button>
-      <button id="next">Next</button>
-      &nbsp; &nbsp;
-      <span
-        >Page: <span id="page_num"></span> / <span id="page_count"></span
-      ></span>
+    <div
+      class="modal"
+      id="collector"
+      tabindex="-1"
+      role="dialog"
+      data-overlay-dismissal-disabled="true"
+      data-esc-dismissal-disabled="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <!-- File input -->
+          <div class="custom-file">
+            <input type="file" id="pdffile" accept=".pdf" />
+            <label for="pdffile">Upload the PDF to be stamped</label>
+          </div>
 
-      <button id="clear">Clear</button>
-      <input value="100" type="number" id="zoom" style="width: 50px" />
-      <button id="zoomer">Zoom</button>
-      <button id="download">Download</button>
+          <!-- Multi-file input -->
+          <div class="custom-file">
+            <input type="file" id="stampfile" accept=".jpg,.png,.gif,.jpeg" />
+            <label for="stampfile">Upload the image of the stamp</label>
+          </div>
+
+          <div class="text-right mt-20">
+            <!-- text-right = text-align: right, mt-20 = margin-top: 2rem (20px) -->
+            <!-- <a href="#" class="btn mr-5" role="button">Close</a> -->
+            <a
+              id="collectorload"
+              href="#collector"
+              class="btn btn-primary collectorload"
+              role="button"
+              >Continue</a
+            >
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div id="logo">
-      <img
-        id="drag1"
-        src="https://juripassmediaservice.onrender.com/v1/file/preview/avatar/stamp_1680993958285.png"
-        draggable="true"
-        crossorigin="anonymous"
-        ondragstart="drag(event)"
-      />
+    <!-- Page wrapper -->
+    <div class="page-wrapper">
+      <!-- Modal toggle inside the content wrapper -->
+      <div class="content-wrapper">
+        <a
+          style="visibility: hidden"
+          href="#entrypoint"
+          id="entrance"
+          class="btn btn-primary"
+          role="button"
+        ></a>
+      </div>
     </div>
 
-    <script src="./build/main.js"></script>
+    <script src="./build/file.js"></script>
 
-    <script src="./build/drag.js"></script>
-
-    <script src="./build/print.js"></script>
+    <script src="./build/constant.js"></script>
   </body>
 </html>
