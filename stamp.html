@@ -5,6 +5,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <script src="./build/util.js"></script>
+
+    <script src="./build/constant.js"></script>
+
+    <script>
+      // set the app context
+      stage();
+
+      if (!Context.PDF || !Context.Stamp || !Context.PDFName) {
+        navigate('/');
+      }
+    </script>
+
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"
       integrity="sha512-ml/QKfG3+Yes6TwOzQb7aCNtJF4PUyha6R3w8pSTo/VJSywl7ZreYvvtUso7fKevpsI+pYVVwnu82YO0q3V6eg=="
@@ -40,9 +53,9 @@
       }
 
       /*
-      Aligns the logo to the bottom right corner of the page
+      Aligns the stamp to the bottom right corner of the page
        */
-      #logo {
+      #stamp {
         position: absolute;
         bottom: 0;
         right: 0;
@@ -50,9 +63,9 @@
       }
 
       /*
-        reduces the size of the logo
+        reduces the size of the stamp
          */
-      #logo img {
+      #stamp img {
         width: 100px;
       }
 
@@ -86,10 +99,10 @@
       <button id="download">Download</button>
     </div>
 
-    <div id="logo">
+    <div id="stamp">
       <img
-        id="drag1"
-        src="https://juripassmediaservice.onrender.com/v1/file/preview/avatar/stamp_1680993958285.png"
+        id="istamp"
+        src=""
         draggable="true"
         crossorigin="anonymous"
         ondragstart="drag(event)"
@@ -101,7 +114,5 @@
     <script src="./build/drag.js"></script>
 
     <script src="./build/print.js"></script>
-
-    <script src="./build/constant.js"></script>
   </body>
 </html>

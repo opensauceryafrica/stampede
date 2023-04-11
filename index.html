@@ -31,6 +31,15 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
 
+    <script src="./build/constant.js"></script>
+
+    <script src="./build/util.js"></script>
+
+    <script>
+      // set the app context
+      stage();
+    </script>
+
     <style>
       /* Style buttons */
       .collectorload {
@@ -83,13 +92,18 @@
         <div class="modal-content">
           <!-- File input -->
           <div class="custom-file">
-            <input type="file" id="pdffile" accept=".pdf" />
+            <input required type="file" id="pdffile" accept=".pdf" />
             <label for="pdffile">Upload the PDF to be stamped</label>
           </div>
 
           <!-- Multi-file input -->
           <div class="custom-file">
-            <input type="file" id="stampfile" accept=".jpg,.png,.gif,.jpeg" />
+            <input
+              required
+              type="file"
+              id="stampfile"
+              accept=".jpg,.png,.gif,.jpeg"
+            />
             <label for="stampfile">Upload the image of the stamp</label>
           </div>
 
@@ -110,6 +124,7 @@
 
     <!-- Page wrapper -->
     <div class="page-wrapper">
+      <div class="sticky-alerts"></div>
       <!-- Modal toggle inside the content wrapper -->
       <div class="content-wrapper">
         <a
@@ -123,7 +138,5 @@
     </div>
 
     <script src="./build/file.js"></script>
-
-    <script src="./build/constant.js"></script>
   </body>
 </html>
