@@ -33,14 +33,42 @@ interface PDFSize {
 
 declare var PDFLib: PDFLib;
 
+/** 
+ * printPDF creates a stateful version of the PDF containing the stamp(s)
+and downloads it
+*/
 async function printPDF() {
-  const url =
-    'https://juripassmediaservice.onrender.com/v1/file/download/avatar/claim_1680977804933.pdf?downloadToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2Q1ODkwMWE3M2UzNDlhN2I5YjU2NWQiLCJlbWFpbCI6ImNoZWZAb3BlbnNhdWNlcmVyLmNvbSIsImlhdCI6MTY4MDk2NzMzMywiZXhwIjoxNjgxMDUzNzMzfQ.BM92fz3bXn8J5xCmtJKmnOAUkCEJTHm1qE3YaVQld5c';
-  const existingPdfBytes = await fetch(url).then((res) => res.arrayBuffer());
+  if (!Context.PDF) {
+    toast('No PDF found!');
+    return;
+  }
 
-  const stamp = await fetch(
-    'https://juripassmediaservice.onrender.com/v1/file/preview/avatar/stamp_1680993958285.png'
-  ).then((res) => res.arrayBuffer());
+  if (!Context.Stamp) {
+    toast('No stamp found!');
+    return;
+  }
+
+  const existingPdfBytes = await fetch(Context.PDF)
+    .then((res) => res.arrayBuffer())
+    .catch((err: Error) => {
+      toast(err.message);
+    });
+
+  // if we couldn't get the PDF, return
+  if (!existingPdfBytes || !(existingPdfBytes instanceof ArrayBuffer)) {
+    return;
+  }
+
+  const stamp = await fetch(Context.Stamp)
+    .then((res: Response) => res.arrayBuffer())
+    .catch((err: Error) => {
+      toast(err.message);
+    });
+
+  // if we couldn't get the stamp, return
+  if (!stamp || !(stamp instanceof ArrayBuffer)) {
+    return;
+  }
 
   const pdf = await PDFLib.PDFDocument.load(existingPdfBytes);
 
@@ -65,10 +93,14 @@ async function printPDF() {
     }
   }
 
-  const pdfBytes = await pdf.save();
-  saveByteArrayToPDF(pdfName, pdfBytes);
+  saveByteArrayToPDF(Context.PDFName, await pdf.save());
+
+  toast('PDF downloaded.', Misc.Success);
 }
 
+/**
+ * saveByteArrayToPDF saves the PDF to the user's computer
+ */
 function saveByteArrayToPDF(name: string, byte: BlobPart) {
   var blob = new Blob([byte], { type: 'application/pdf' });
   var link = document.createElement('a');
@@ -77,5 +109,4 @@ function saveByteArrayToPDF(name: string, byte: BlobPart) {
   link.download = fileName;
   link.click();
 }
-
 document.getElementById('download').addEventListener('click', printPDF);
