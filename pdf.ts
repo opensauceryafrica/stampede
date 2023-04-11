@@ -1,14 +1,17 @@
-// If absolute URL from the remote server is provided, configure the CORS
-// header on that server.
-var url =
-  'https://bafybeidxca4pkox75mcypdfo5ravb6xuyp6ljdkqtn5jibtjhx5dbmhue4.ipfs.w3s.link/perfection_resume_v0.1.0.pdf';
+interface pdfjsLib {
+  GlobalWorkerOptions: {
+    workerSrc: string;
+  };
+  getDocument: (url: string) => {
+    promise: Promise<PDFDoc>;
+  };
+}
 
 // Loaded via <script> tag, create shortcut to access PDF.js exports.
-var pdfjsLib = window['pdfjs-dist/build/pdf'];
+var pdfjsLib: pdfjsLib = window[URLs.PDFJSLib];
 
 // The workerSrc property shall be specified.
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+pdfjsLib.GlobalWorkerOptions.workerSrc = URLs.PDFJSWorker;
 
 interface PDFDoc {
   numPages: number;
@@ -40,7 +43,8 @@ var pdfDoc: PDFDoc = null,
     parseInt((document.getElementById('zoom') as HTMLInputElement).value) / 100,
   canvas = document.getElementById('the-canvas') as HTMLCanvasElement,
   ctx = canvas.getContext('2d'),
-  pdfName = url.split('/').pop()?.replace(/\?.*/, '');
+  url = Context.PDF;
+(document.getElementById('istamp') as HTMLMediaElement).src = Context.Stamp;
 
 /**
  * Get page info from document, resize canvas accordingly, and render page.
