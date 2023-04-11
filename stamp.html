@@ -35,6 +35,12 @@
       rel="stylesheet"
     />
 
+    <!-- Halfmoon CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/css/halfmoon-variables.min.css"
+      rel="stylesheet"
+    />
+
     <!-- Halfmoon JS -->
     <script src="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/js/halfmoon.min.js"></script>
 
@@ -47,8 +53,9 @@
       }
 
       #canvas-con {
+        margin-top: 2vh;
         text-align: center;
-        height: 90vh;
+        height: 80vh;
         overflow: scroll;
       }
 
@@ -77,38 +84,47 @@
     <title>Interactive Editor | Stampede</title>
   </head>
   <body>
-    <div id="canvas-con">
-      <canvas
-        id="the-canvas"
-        ondrop="drop(event)"
-        ondragover="allowDrop(event)"
-      ></canvas>
+    <div class="container">
+      <div id="canvas-con">
+        <canvas
+          id="the-canvas"
+          ondrop="drop(event)"
+          ondragover="allowDrop(event)"
+        ></canvas>
+      </div>
+
+      <div id="controls">
+        <button class="btn" type="button" id="prev">Previous</button>
+        <button class="btn" type="button" id="next">Next</button>
+        &nbsp; &nbsp;
+        <span class="content-title"
+          >Page: <span id="page_num"></span> / <span id="page_count"></span
+        ></span>
+
+        <button class="btn btn-danger" type="button" id="clear">Clear</button>
+        <input
+          class="alt-dm border"
+          value="100"
+          type="number"
+          id="zoom"
+          style="width: 50px"
+        />
+        <button class="btn alt-dm" type="button" id="zoomer">Zoom</button>
+        <button class="btn btn-secondary" type="button" id="download">
+          Download
+        </button>
+      </div>
+
+      <div id="stamp">
+        <img
+          id="istamp"
+          src=""
+          draggable="true"
+          crossorigin="anonymous"
+          ondragstart="drag(event)"
+        />
+      </div>
     </div>
-
-    <div id="controls">
-      <button id="prev">Previous</button>
-      <button id="next">Next</button>
-      &nbsp; &nbsp;
-      <span
-        >Page: <span id="page_num"></span> / <span id="page_count"></span
-      ></span>
-
-      <button id="clear">Clear</button>
-      <input value="100" type="number" id="zoom" style="width: 50px" />
-      <button id="zoomer">Zoom</button>
-      <button id="download">Download</button>
-    </div>
-
-    <div id="stamp">
-      <img
-        id="istamp"
-        src=""
-        draggable="true"
-        crossorigin="anonymous"
-        ondragstart="drag(event)"
-      />
-    </div>
-
     <script src="./build/pdf.js"></script>
 
     <script src="./build/drag.js"></script>
