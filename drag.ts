@@ -1,3 +1,6 @@
+/**
+ * allowDrop preps an element to accept a drop
+ */
 function allowDrop(ev: DragEvent) {
   ev.preventDefault();
   // ev.dataTransfer.dropEffect = 'copy';
@@ -6,6 +9,9 @@ function allowDrop(ev: DragEvent) {
 var offsetX = 0,
   offsetY = 0;
 
+/**
+ * drag sets the data to be transferred along with the cartesian coordinates
+ */
 function drag(ev: DragEvent) {
   ev.dataTransfer.setData('stamp', (ev.target as HTMLElement).id);
 
@@ -14,6 +20,9 @@ function drag(ev: DragEvent) {
   offsetY = ev.clientY - (ev.target as HTMLElement).getBoundingClientRect().y;
 }
 
+/**
+ * drop draws the image on the canvas and stores the data in localStorage
+ */
 function drop(ev: DragEvent) {
   ev.preventDefault();
   var data = ev.dataTransfer.getData('stamp');
@@ -21,7 +30,7 @@ function drop(ev: DragEvent) {
   // draw image on canvas
   var canvas = ev.target as HTMLCanvasElement;
   var ctx = canvas.getContext('2d');
-  var logo = document.getElementById(data) as CanvasImageSource;
+  var stamp = document.getElementById(data) as CanvasImageSource;
 
   // canvas left and top
   var rect = document.getElementById('the-canvas').getBoundingClientRect();
@@ -34,11 +43,14 @@ function drop(ev: DragEvent) {
   const w = 150,
     h = 120;
 
-  ctx.drawImage(logo, cordX, cordY, w, h);
+  ctx.drawImage(stamp, cordX, cordY, w, h);
 
   storeDrawing(data, cordX, cordY, pageNum, w, h);
 }
 
+/**
+ * storeDrawing stores the data in localStorage
+ */
 function storeDrawing(
   id: string,
   x: number,
@@ -57,6 +69,9 @@ function storeDrawing(
   localStorage.setItem('stampede', JSON.stringify(data));
 }
 
+/**
+ * removeDrawings removes drawings for a page from localStorage
+ */
 function removeDrawings(page: number) {
   // get any current data
   const sdata = localStorage.getItem('stampede') || '{}';
@@ -75,6 +90,9 @@ interface Drawing {
   page: number;
 }
 
+/**
+ * getDrawings returns drawings for a page from localStorage
+ */
 function getDrawings(page: number): Drawing[] {
   // get any current data
   const sdata = localStorage.getItem('stampede') || '{}';
@@ -82,16 +100,21 @@ function getDrawings(page: number): Drawing[] {
   return data[page] || [];
 }
 
-// reDraw iterates over drawings and draws them on the canvas
+/**
+ * reDraw iterates over drawings and draws them on the canvas
+ */
 function reDraw(drawings: Drawing[]) {
   for (const drawing of drawings) {
     var canvas = document.getElementById('the-canvas') as HTMLCanvasElement;
     var ctx = canvas.getContext('2d');
-    var logo = document.getElementById(drawing.id) as CanvasImageSource;
-    ctx.drawImage(logo, drawing.x, drawing.y, drawing.w, drawing.h);
+    var stamp = document.getElementById(drawing.id) as CanvasImageSource;
+    ctx.drawImage(stamp, drawing.x, drawing.y, drawing.w, drawing.h);
   }
 }
 
+/**
+ * clear clears the canvas and removes drawings from localStorage
+ */
 function clear() {
   var canvas = document.getElementById('the-canvas') as HTMLCanvasElement;
   var ctx = canvas.getContext('2d');
@@ -102,5 +125,4 @@ function clear() {
   // re-render page
   queueRenderPage(pageNum);
 }
-
 document.getElementById('clear').addEventListener('click', clear);
